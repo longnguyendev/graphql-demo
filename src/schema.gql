@@ -1,0 +1,130 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Message {
+  id: Float!
+  createdAt: Date!
+  updatedAt: Date!
+  sender: User!
+  content: String!
+  conversation: Conversation!
+}
+
+type Conversation {
+  id: Float!
+  createdAt: Date!
+  updatedAt: Date!
+  participants: [User!]!
+  messages: [Message!]!
+  lastMessage: Message
+  name: String!
+}
+
+type User {
+  id: Float!
+  createdAt: Date!
+  updatedAt: Date!
+  email: String!
+  firstName: String!
+  lastName: String!
+  gender: Gender!
+  dob: Date!
+  name: String!
+}
+
+enum Gender {
+  Other
+  Male
+  Female
+}
+
+type Auth {
+  accessToken: String!
+}
+
+type UserEdge {
+  cursor: String!
+  node: User!
+}
+
+type PaginatedUser {
+  edges: [UserEdge!]
+  nodes: [User!]
+  totalCount: Float!
+  nextCursor: String
+}
+
+type ConversationEdge {
+  cursor: String!
+  node: Conversation!
+}
+
+type PaginatedConversation {
+  edges: [ConversationEdge!]
+  nodes: [Conversation!]
+  totalCount: Float!
+  nextCursor: String
+}
+
+type MessageEdge {
+  cursor: String!
+  node: Message!
+}
+
+type PaginatedMessage {
+  edges: [MessageEdge!]
+  nodes: [Message!]
+  totalCount: Float!
+  nextCursor: String
+}
+
+"""Date custom scalar type"""
+scalar Date
+
+type Query {
+  me: User!
+  users(first: Float, after: String, search: String! = ""): PaginatedUser!
+  conversations(first: Float, after: String): PaginatedConversation!
+  conversation(conversationId: Float!): Conversation!
+  messages(first: Float, after: String, conversationId: Float!): PaginatedMessage!
+  message(id: Float!): Message!
+}
+
+type Mutation {
+  login(loginInput: LoginInput!): Auth!
+  signUp(signUpInput: CreateUserInput!): Auth!
+  createConversation(createConversationInput: CreateConversationInput!): Conversation!
+  removeConversation(id: Float!): Conversation!
+  createMessage(createMessageInput: CreateMessageInput!): Message!
+  removeMessage(id: Float!): Message!
+}
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+input CreateUserInput {
+  email: String!
+  firstName: String!
+  lastName: String!
+  password: String!
+  gender: Gender!
+  dob: Date!
+}
+
+input CreateConversationInput {
+  name: String
+  participantIds: [Float!]!
+}
+
+input CreateMessageInput {
+  conversationId: Float!
+  content: String!
+}
+
+type Subscription {
+  conversationCreated: Conversation!
+  messageCreated(conversationId: Float): Message!
+}
