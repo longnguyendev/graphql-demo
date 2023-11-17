@@ -44,6 +44,7 @@ export class MessageResolver {
 
     const messageCreated = await this.messageService.create({
       ...createMessageInput,
+      content: createMessageInput.content.trim(),
       conversation,
       sender,
     });

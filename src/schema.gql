@@ -28,6 +28,7 @@ type User {
   email: String!
   firstName: String!
   lastName: String!
+  bio: String
   gender: Gender!
   dob: Date!
   name: String!

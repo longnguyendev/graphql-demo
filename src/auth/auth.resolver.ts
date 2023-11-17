@@ -23,6 +23,10 @@ export class AuthResolver {
 
   @Mutation(() => Auth)
   async signUp(@Args('signUpInput') createUserInput: CreateUserInput) {
-    return this.authService.signUp(createUserInput);
+    return this.authService.signUp({
+      ...createUserInput,
+      firstName: createUserInput.firstName.trim(),
+      lastName: createUserInput.lastName.trim(),
+    });
   }
 }

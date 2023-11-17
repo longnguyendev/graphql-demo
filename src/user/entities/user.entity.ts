@@ -1,14 +1,14 @@
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
-import { IsEmail, MinLength } from 'class-validator';
+import { IsEmail } from 'class-validator';
 import { BaseEntity } from 'src/common/entities/base.entity';
 import { Conversation } from 'src/conversation/entities/conversation.entity';
 import { Message } from 'src/message/entities/message.entity';
 import { Column, Entity, ManyToMany, OneToMany } from 'typeorm';
 
 export enum Gender {
-  Other,
-  Male,
-  Female,
+  Other = 'Other',
+  Male = 'Male',
+  Female = 'Female',
 }
 
 registerEnumType(Gender, {
@@ -31,6 +31,10 @@ export class User extends BaseEntity {
   @Field()
   lastName: string;
 
+  @Column({ nullable: true })
+  @Field({ nullable: true })
+  bio?: string;
+
   @Column({
     type: 'enum',
     enum: Gender,
@@ -46,7 +50,6 @@ export class User extends BaseEntity {
   dob: Date;
 
   @Column()
-  @MinLength(6)
   password: string;
 
   @ManyToMany(() => Conversation, (conversation) => conversation.participants, {

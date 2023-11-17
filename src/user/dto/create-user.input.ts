@@ -1,27 +1,46 @@
 import { InputType, Field } from '@nestjs/graphql';
-import { IsEmail, IsEnum, MinLength } from 'class-validator';
+import {
+  IsDate,
+  IsEmail,
+  IsEnum,
+  MaxDate,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
 import { Gender } from '../entities/user.entity';
+import { endOfDay } from 'date-fns';
+import { IsVietnameseName } from '../vietnamese-name.decorator';
 
 @InputType()
 export class CreateUserInput {
   @Field()
-  @IsEmail()
+  @IsEmail({}, { message: 'Enter valid email' })
+  @MaxLength(255)
   email: string;
 
   @Field()
+  @MinLength(2, { message: 'First name contains at least 2 characters' })
+  @MaxLength(50, { message: 'First name must not exceed 50 characters' })
+  @IsVietnameseName()
   firstName: string;
 
   @Field()
+  @MinLength(2, { message: 'Last name contains at least 2 characters' })
+  @MaxLength(20, { message: 'Last name must not exceed 20 characters' })
+  @IsVietnameseName()
   lastName: string;
 
   @Field()
-  @MinLength(6)
+  @MinLength(6, { message: 'Password contains at least 6 characters' })
+  @MaxLength(255, { message: 'Password must not exceed 255 characters' })
   password: string;
 
   @Field(() => Gender)
-  @IsEnum(Gender)
+  @IsEnum(Gender, { message: 'Enter valid Gendder' })
   gender: Gender;
 
   @Field()
+  @IsDate({ message: 'Enter valid Birthday' })
+  @MaxDate(endOfDay(new Date()), { message: 'Enter valid Birthday' })
   dob: Date;
 }
