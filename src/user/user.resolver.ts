@@ -1,4 +1,11 @@
-import { Resolver, Query, ResolveField, Parent, Args } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  ResolveField,
+  Parent,
+  Args,
+  Mutation,
+} from '@nestjs/graphql';
 import { User } from './entities/user.entity';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
@@ -6,6 +13,7 @@ import { CurrentUser } from './user.decorator';
 import { UserService } from './user.service';
 import { PaginatedUser } from './entities/paginated-user';
 import { PaginationArgs } from 'src/common/args/pagination.args';
+import { UpdateUserInput } from './dto/update-user.input';
 
 @Resolver(() => User)
 @UseGuards(JwtAuthGuard)
@@ -30,5 +38,13 @@ export class UserResolver {
   name(@Parent() user: User) {
     const { firstName, lastName } = user;
     return `${firstName} ${lastName}`;
+  }
+
+  @Mutation(() => User)
+  async updateUser(
+    @Args('updateUserInput') updateUserInput: UpdateUserInput,
+    @CurrentUser('id') userId: number,
+  ) {
+    return this.userService.update(userId, updateUserInput);
   }
 }

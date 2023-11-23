@@ -95,6 +95,7 @@ type Query {
 type Mutation {
   login(loginInput: LoginInput!): Auth!
   signUp(signUpInput: CreateUserInput!): Auth!
+  updateUser(updateUserInput: UpdateUserInput!): User!
   createConversation(createConversationInput: CreateConversationInput!): Conversation!
   removeConversation(id: Float!): Conversation!
   createMessage(createMessageInput: CreateMessageInput!): Message!
@@ -113,6 +114,15 @@ input CreateUserInput {
   password: String!
   gender: Gender!
   dob: Date!
+  bio: String
+}
+
+input UpdateUserInput {
+  firstName: String
+  lastName: String
+  gender: Gender
+  dob: Date
+  bio: String
 }
 
 input CreateConversationInput {

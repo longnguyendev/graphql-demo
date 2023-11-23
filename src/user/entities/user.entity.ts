@@ -33,7 +33,7 @@ export class User extends BaseEntity {
 
   @Column({ nullable: true })
   @Field({ nullable: true })
-  bio?: string;
+  bio: string;
 
   @Column({
     type: 'enum',

@@ -3,6 +3,7 @@ import {
   IsDate,
   IsEmail,
   IsEnum,
+  IsOptional,
   MaxDate,
   MaxLength,
   MinLength,
@@ -15,7 +16,7 @@ import { IsVietnameseName } from '../vietnamese-name.decorator';
 export class CreateUserInput {
   @Field()
   @IsEmail({}, { message: 'Enter valid email' })
-  @MaxLength(255)
+  @MaxLength(255, { message: 'Email must not exceed 255 characters' })
   email: string;
 
   @Field()
@@ -43,4 +44,8 @@ export class CreateUserInput {
   @IsDate({ message: 'Enter valid Birthday' })
   @MaxDate(endOfDay(new Date()), { message: 'Enter valid Birthday' })
   dob: Date;
+
+  @Field({ nullable: true })
+  @IsOptional()
+  bio?: string;
 }
