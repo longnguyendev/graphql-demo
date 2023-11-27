@@ -69,8 +69,8 @@ export class ConversationResolver {
 
   @Query(() => Conversation)
   async conversation(
-    @Args('conversationId', { type: () => Number }) conversationId: number,
     @CurrentUser('id') userId: string,
+    @Args('conversationId', { type: () => Number }) conversationId: number,
   ) {
     const data = await this.conversationService.findOne(conversationId, {
       queryBuilder: (qb) => {
@@ -97,15 +97,19 @@ export class ConversationResolver {
     @Parent() conversation: Conversation,
     @CurrentUser('id') userId: number,
   ) {
-    return (
-      conversation?.name ||
-      conversation.participants
-        .filter((participant) => participant.id !== userId)
-        .map(
-          (participant) => `${participant.firstName} ${participant.lastName}`,
-        )
-        .join(', ')
-    );
+    if (conversation?.name) {
+      return conversation.name;
+    }
+
+    const participantNames = conversation.participants
+      .filter((participant) => participant.id !== userId)
+      .map((participant) => participant.lastName);
+
+    const name = participantNames.slice(0, 3).join(', ');
+
+    return participantNames.length > 3
+      ? name + ` and +${participantNames.length - 3} others`
+      : name;
   }
 
   @Subscription(() => Conversation, {

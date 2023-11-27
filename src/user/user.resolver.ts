@@ -1,11 +1,4 @@
-import {
-  Resolver,
-  Query,
-  ResolveField,
-  Parent,
-  Args,
-  Mutation,
-} from '@nestjs/graphql';
+import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
 import { User } from './entities/user.entity';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
@@ -34,10 +27,13 @@ export class UserResolver {
     return this.userService.paginateUser(paginationArgs, userId, search);
   }
 
-  @ResolveField(() => String)
-  name(@Parent() user: User) {
-    const { firstName, lastName } = user;
-    return `${firstName} ${lastName}`;
+  @Query(() => PaginatedUser)
+  async usersNotMe(
+    @CurrentUser('id') userId: number,
+    @Args() paginationArgs: PaginationArgs,
+    @Args('search', { defaultValue: '' }) search?: string,
+  ) {
+    return this.userService.getUsers(paginationArgs, userId, search);
   }
 
   @Mutation(() => User)

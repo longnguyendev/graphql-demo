@@ -28,10 +28,10 @@ type User {
   email: String!
   firstName: String!
   lastName: String!
+  name: String!
   bio: String
   gender: Gender!
   dob: Date!
-  name: String!
 }
 
 enum Gender {
@@ -86,6 +86,7 @@ scalar Date
 type Query {
   me: User!
   users(first: Float, after: String, search: String! = ""): PaginatedUser!
+  usersNotMe(first: Float, after: String, search: String! = ""): PaginatedUser!
   conversations(first: Float, after: String): PaginatedConversation!
   conversation(conversationId: Float!): Conversation!
   messages(first: Float, after: String, conversationId: Float!): PaginatedMessage!
