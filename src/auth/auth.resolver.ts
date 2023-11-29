@@ -25,6 +25,7 @@ export class AuthResolver {
   async signUp(@Args('signUpInput') createUserInput: CreateUserInput) {
     return this.authService.signUp({
       ...createUserInput,
+      email: createUserInput.email.toLowerCase(),
       firstName: createUserInput.firstName.trim(),
       lastName: createUserInput.lastName.trim(),
     });

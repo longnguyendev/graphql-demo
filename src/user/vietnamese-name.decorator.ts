@@ -12,7 +12,7 @@ export class IsVietnameseNameConstraint
   validate(value: string) {
     // Use a regex to check if the name contains only Vietnamese characters
     const regex = /^[\p{L}\s]+$/u;
-    return regex.test(value);
+    return regex.test(value.trim()) && value.trim().length >= 2;
   }
 
   defaultMessage() {

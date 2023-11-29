@@ -21,6 +21,7 @@ import { PUB_SUB } from 'src/pub-sub/pub-sub.module';
 import { PubSubEngine } from 'graphql-subscriptions';
 import { CONVERSATION_CREATED_EVENT } from './conversation.constant';
 import { In } from 'typeorm';
+import { UpdateConversationInput } from './dto/update-conversation.input';
 
 @Resolver(() => Conversation)
 @UseGuards(JwtAuthGuard)
@@ -90,6 +91,28 @@ export class ConversationResolver {
   @Mutation(() => Conversation)
   removeConversation(@Args('id', { type: () => Number }) id: number) {
     return this.conversationService.remove(id);
+  }
+
+  @Mutation(() => Conversation)
+  async updateConversation(
+    @Args('updateConversationInput')
+    { id, participantIds, name }: UpdateConversationInput,
+  ) {
+    const participants = await this.userService.findAll({
+      queryBuilder: (qb) => {
+        qb.where({ id: In(participantIds) });
+      },
+    });
+
+    const conversation = await this.conversationService.findOneOrFail(id);
+
+    conversation.participants = participants;
+
+    conversation.name = name;
+
+    await this.conversationService.updateNew(conversation);
+
+    return conversation;
   }
 
   @ResolveField(() => String)

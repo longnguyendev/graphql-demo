@@ -47,7 +47,9 @@ export class AuthService {
   }
 
   async signUp(createUserDto: CreateUserInput): Promise<Auth> {
-    const user = await this.userService.findByEmail(createUserDto.email);
+    const user = await this.userService.findByEmail(
+      createUserDto.email.toLowerCase(),
+    );
 
     if (user) {
       throw new ConflictException('User already exists');

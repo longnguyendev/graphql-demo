@@ -62,6 +62,10 @@ export class BaseService<Entity extends BaseEntity> {
     return this.findOneOrFail(id);
   }
 
+  async updateNew(partialEntity: Entity): Promise<void> {
+    await this.repository.save(partialEntity);
+  }
+
   async remove(id: number): Promise<Entity> {
     const entity = await this.findOneOrFail(id);
 

@@ -41,6 +41,11 @@ export class UserResolver {
     @Args('updateUserInput') updateUserInput: UpdateUserInput,
     @CurrentUser('id') userId: number,
   ) {
-    return this.userService.update(userId, updateUserInput);
+    return this.userService.update(userId, {
+      ...updateUserInput,
+      firstName: updateUserInput.firstName.trim(),
+      lastName: updateUserInput.lastName.trim(),
+      bio: updateUserInput.bio ? updateUserInput.bio.trim() : null,
+    });
   }
 }

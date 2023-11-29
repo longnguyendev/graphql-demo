@@ -99,6 +99,7 @@ type Mutation {
   updateUser(updateUserInput: UpdateUserInput!): User!
   createConversation(createConversationInput: CreateConversationInput!): Conversation!
   removeConversation(id: Float!): Conversation!
+  updateConversation(updateConversationInput: UpdateConversationInput!): Conversation!
   createMessage(createMessageInput: CreateMessageInput!): Message!
   removeMessage(id: Float!): Message!
 }
@@ -129,6 +130,12 @@ input UpdateUserInput {
 input CreateConversationInput {
   name: String
   participantIds: [Float!]!
+}
+
+input UpdateConversationInput {
+  name: String
+  participantIds: [Float!]
+  id: Float!
 }
 
 input CreateMessageInput {
