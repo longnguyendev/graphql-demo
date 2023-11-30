@@ -126,7 +126,7 @@ export class ConversationResolver {
 
     const participantNames = conversation.participants
       .filter((participant) => participant.id !== userId)
-      .map((participant) => participant.lastName);
+      .map((participant) => participant.name);
 
     const name = participantNames.slice(0, 3).join(', ');
 

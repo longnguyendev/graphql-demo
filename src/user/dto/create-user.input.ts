@@ -18,7 +18,7 @@ const regexEmail = /^[^*]*$/;
 @InputType()
 export class CreateUserInput {
   @Field()
-  @IsEmail({}, { message: 'Enter valid email' })
+  @IsEmail({}, { message: 'Enter valid email!!!' })
   @MaxLength(255, { message: 'Email must not exceed 255 characters' })
   @Matches(regexEmail, { message: 'Enter valid email' })
   email: string;
@@ -50,6 +50,7 @@ export class CreateUserInput {
   dob: Date;
 
   @Field({ nullable: true })
+  @MaxLength(200, { message: 'Bio must not exceed 200 characters' })
   @IsOptional()
   bio?: string;
 }
