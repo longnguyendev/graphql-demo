@@ -1,5 +1,5 @@
 import { InputType, Field } from '@nestjs/graphql';
-import { ArrayMinSize, IsOptional, MaxLength } from 'class-validator';
+import { IsOptional, MaxLength } from 'class-validator';
 
 @InputType()
 export class CreateConversationInput {
@@ -9,6 +9,5 @@ export class CreateConversationInput {
   name?: string;
 
   @Field(() => [Number])
-  @ArrayMinSize(3, { message: 'choose more 3 to add new group' })
   participantIds: number[];
 }
