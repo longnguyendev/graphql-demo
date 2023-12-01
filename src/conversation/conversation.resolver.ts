@@ -50,9 +50,7 @@ export class ConversationResolver {
       participants: [user, ...participants],
     });
 
-    this.pubSub.publish(CONVERSATION_CREATED_EVENT, {
-      conversationCreated,
-    });
+    this.pubSub.publish(CONVERSATION_CREATED_EVENT, conversationCreated);
 
     return conversationCreated;
   }
@@ -139,19 +137,16 @@ export class ConversationResolver {
     async filter(this: ConversationResolver, payload, _, context) {
       const userId = context.req.user.id;
 
-      const conversation = await this.conversationService.findOne(
-        payload.conversationCreated.id,
-        {
-          queryBuilder: (qb) => {
-            qb.innerJoin(
-              `${qb.alias}.participants`,
-              'user',
-              'user.id = :userId',
-              { userId },
-            );
-          },
+      const conversation = await this.conversationService.findOne(payload.id, {
+        queryBuilder: (qb) => {
+          qb.innerJoin(
+            `${qb.alias}.participants`,
+            'user',
+            'user.id = :userId',
+            { userId },
+          );
         },
-      );
+      });
       return Boolean(conversation);
     },
   })
